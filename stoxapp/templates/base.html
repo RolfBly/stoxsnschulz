@@ -1,0 +1,42 @@
+﻿<html>
+  <head>
+    <style>
+      body {
+        font-family: "Verdana", sans-serif;
+        font-size: small
+      }
+      table, th, td {
+        font-family: "Consolas", monospace;
+        font-size: small; 
+        text-align: right;
+        vertical-align: top; 
+        border-collapse: collapse;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 4px;
+      }
+      td, th {
+        width: 40px;
+      }
+      #th1 {
+        text-align: left;
+        width: 210px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 4px;
+      }
+      #td1 {
+        text-align: left;
+      }
+      tr:nth-of-type(even) {
+        background-color: Azure;
+      }
+    </style>
+    <title>Stox S.N. Schulz</title>
+  </head>
+  <body>
+    <div><a href="/">Home</a> <a href="/about">About</a></div>
+    <hr>
+    {% block content %}{% endblock %}
+  </body>
+</html>
