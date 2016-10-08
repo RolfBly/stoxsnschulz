@@ -10,9 +10,9 @@ The project has two sections:
 
 1. a screenscraper/data reshuffler, to run once each working day after about 17:20 CET. 
 
-    - ud.py (for _U_ps and _D_owns) reads all AEX, AMC, AScX stocks from www.beleggen.nl, and a couple of interesting numbers for each of them (75 stocks in total). 
+    - ud.py (for __U__ps and __D__owns) reads all 75 AEX, AMC, AScX stocks, plus couple of interesting numbers about them, from three tables on www.beleggen.nl.   
     - hilo.py reads 52 week _HI_gh and _LO_w from each individual stock page, also on www.beleggen.nl. A few extra parameters are calculated for each stock. 
-    - ud.py calls hilo.py, and then outputs five shortlists as pickles in the pickles-directory; it also writes the shortlists, nicely formatted, to the console, or to a file if redirected. 
+    - ud.py calls hilo.py, and then outputs five shortlists as pickles in the pickles-directory; it also writes the shortlists, nicely formatted, to the console (or to a file if redirected). 
     
 2. a minimal Flask app that reads the pickles and presents them on a web site. The site has just two pages: 
 
