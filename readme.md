@@ -12,7 +12,7 @@ The project has two sections:
 
     - `ud.py` (for **U**ps and **D**owns) reads all 75 AEX, AMC, AScX stocks, and a few interesting numbers about them, from various public web pages. `ud.py` calls `hilo.py`
     - `hilo.py` reads 52 week **HI**gh and **LO**w from each individual stock page, also from various public web pages. A few extra parameters are calculated for each stock. 
-    - When all data is collected, five shortlists are stored as pickles. They can also be output to the console, nicely formatted (or to a file if redirected). 
+    - When all data is collected, five shortlists are computed, and then stored as pickles. They can also be output to the console, nicely formatted (or to a file if redirected). 
     
 2. a minimal Flask app that reads the pickles and presents them on a web site. The site has just two pages: 
 
