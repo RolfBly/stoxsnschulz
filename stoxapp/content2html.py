@@ -47,14 +47,14 @@ def tables2html(tablelist, rundate):
     env = Environment(loader=FileSystemLoader(template_path))  
 
     # Look for the results template  
-    template = env.get_template('main.html')  
+    template = env.get_template('table_template.html')  
 
     # render it once. Pass in whatever values you need.  
     tablelist, rundate = get_tables()  
     html_output = template.render(rundate=rundate,  
                                   tablelist=tablelist)  
 
-    outfile = os.path.join(template_path, 'index.html')  
+    outfile = os.path.join(template_path, 'main_table.html')  
     with open(outfile, 'w') as f:  
         f.write(html_output.encode('utf-8'))  
 

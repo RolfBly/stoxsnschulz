@@ -3,12 +3,13 @@ import requests
 import bs4  
 import re  
 import pickle
-import os  
+import os
+import argparse 
 from operator import itemgetter, lt, le, gt, ge  
 
 import hilo  
 
-# helpers  
+# helpers
 def pct2float(pct):  
     return float(pct.replace(',', '.').strip('%'))/100  
 
@@ -24,19 +25,40 @@ def save_thing(thing, path):
     with open(path, 'wb') as f:
         pickle.dump(thing, f, pickle.HIGHEST_PROTOCOL)
 
-def make_table(Top, head, show=True):  
-    '''Takes Top and header data, 
+def get_topX_index(lst, threshold, key='pct_change_num'):  
+    for i, dic in enumerate(lst):  
+        if abs(dic[key]) >= threshold:  
+            pass  
+        else:  
+            return i  
+    return i + 1  
+
+def filter_topX(lst, threshold, key='pct_BW', op='<='):  
+    ops = {'>'  : gt,  
+           '>=' : ge,  
+           '<'  : lt,  
+           '<=' : le}  
+    func = ops[op]  
+    outlist = []  
+    for i, dic in enumerate(lst):  
+        if func(abs(dic[key]), threshold):  
+           outlist.append(dic)  
+
+    return outlist  
+
+def make_table(Top, head, name):  
+    '''Takes Top and header data, name, 
        creates neat header & table, 
-       outputs it to console unless told otherwise, 
-       returns header data + list of lists row data. '''
+       outputs it to console if __SHOW__ is True,
+       saves the table data in a pickle named name.'''
        
     N = len(Top)  
+    hdat = head, 'change', 'price', 'yrHi', 'yrLo', 'pct_BW', 'BW', 'index'  
+    
     if not 'Alles' in head:  
         head = 'Top {} {} '.format(N, head)  
    
-    hdat = head, 'change', 'price', 'yrHi', 'yrLo', 'pct_BW', 'BW', 'index'  
-   
-    if show: 
+    if __SHOW__: 
         widthl = [28, 7, 7, 4] # column widths in hline and underline  
         widthd = {'w{}'.format(index): value for index, value in enumerate(widthl, 1)}  
         under = 8 * '='  
@@ -59,33 +81,12 @@ def make_table(Top, head, show=True):
                  item['stock_index']]  
 
         dlines.append(items)
-        if show: 
+        if __SHOW__: 
             print line.format(*items)
-        
-    return hdat, dlines
+
+    save_thing((hdat, dlines), make_path(name))
     
-def get_topX_index(lst, threshold, key='pct_change_num'):  
-    for i, dic in enumerate(lst):  
-        if abs(dic[key]) >= threshold:  
-            pass  
-        else:  
-            return i  
-    return i + 1  
-
-def filter_topX(lst, threshold, key='pct_BW', op='<='):  
-    ops = {'>'  : gt,  
-           '>=' : ge,  
-           '<'  : lt,  
-           '<=' : le}  
-    func = ops[op]  
-    outlist = []  
-    for i, dic in enumerate(lst):  
-        if func(abs(dic[key]), threshold):  
-           outlist.append(dic)  
-
-    return outlist  
-   
-# workers  
+# scrapers    
 def getRates(beursindex):  
     '''extract from beursindex: stock name, last price, pct change  
        return stock name, last price as float,  
@@ -150,6 +151,9 @@ def add_yrhilo(Top):
             stock['yr_hi_date'] = None  
         
 def main():  
+    global __SHOW__
+    __SHOW__ = False
+
     all_rates = getRates('aex') + getRates('amx') + getRates('ascx')  
     add_yrhilo(all_rates)  
     all_sorted = sorted(all_rates, key=itemgetter('pct_change_num'), reverse=True)  
@@ -157,38 +161,28 @@ def main():
     # Top X climbers  
     top10_ups = all_sorted[:10]  
     N = get_topX_index(top10_ups, threshold=0.01)  
-    topN_ups = top10_ups[:N]  
-    ups = make_table(topN_ups, 'stijgers')  # add show=False to hide output to console 
-    save_thing(ups, make_path('ups'))  
+    make_table(top10_ups[:N], 'stijgers', 'ups')  
 
     # Top X fallers  
     top10_downs = list(reversed(all_sorted[-10:]))  
     M = get_topX_index(top10_downs, threshold=0.01)  
-    topM_downs = top10_downs[:M]
-    topX_downs = filter_topX(topM_downs, threshold=30)  
-    downs = make_table(topX_downs, 'dalers, pct_BW < 30%')  
-    save_thing(downs, make_path('downs'))  
+    topX_downs = filter_topX(top10_downs[:M], threshold=30)  
+    make_table(topX_downs, 'dalers, pct_BW < 30%', 'downs')  
 
     # Top X bandwidth, pct_BW < 40%  
     all_sorted_by_BW = sorted(all_rates, key=itemgetter('BW'), reverse=True)  
-    top10_BW = all_sorted_by_BW[:10]  
-    topP_BW = filter_topX(top10_BW, threshold=40)  
-    BW = make_table(topP_BW, 'BW, pct_BW < 40%')  
-    save_thing(BW, make_path('BW'))  
+    topP_BW = filter_topX(all_sorted_by_BW[:10], threshold=40)  
+    make_table(topP_BW, 'BW, pct_BW < 40%', 'BW')  
 
     # Top X low scale, BW > 3 euro  
     all_sorted_by_scale = sorted(all_rates, key=itemgetter('pct_BW'))  
-    top10_scale_low = all_sorted_by_scale[:10]  
-    topX_scale_low = filter_topX(top10_scale_low, threshold=3, key='BW', op='>')  
-    low_BW = make_table(topX_scale_low, 'onderin BW, BW > 3')  
-    save_thing(low_BW, make_path('low_BW'))  
+    topX_scale_low = filter_topX(all_sorted_by_scale[:10], threshold=3, key='BW', op='>')  
+    make_table(topX_scale_low, 'onderin BW, BW > 3', 'low_BW')  
 
     # Top X penny stock, pct_BW < 25%  
     all_sorted_by_price = sorted(all_rates, key=itemgetter('last_price'))  
-    top10_cheap = all_sorted_by_price[:10]  
-    topX_cheap = filter_topX(top10_cheap, threshold=25)  
-    cheaps = make_table(topX_cheap, 'El Chipo, pct_BW < 25%')  
-    save_thing(cheaps, make_path('cheap'))  
+    topX_cheap = filter_topX(all_sorted_by_price[:10], threshold=25)  
+    make_table(topX_cheap, 'El Chipo, pct_BW < 25%', 'cheap')  
 
     # top10_expensive = list(reversed(all_sorted_by_price[-10:]))  
     # make_table(top10_expensive, 'DUUR!')  
