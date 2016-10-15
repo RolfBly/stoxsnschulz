@@ -5,11 +5,12 @@ import re
 import pickle
 import os
 import argparse 
+import base64 
 from operator import itemgetter, lt, le, gt, ge  
 
 import hilo  
 
-# helpers
+# helper functions
 def pct2float(pct):  
     return float(pct.replace(',', '.').strip('%'))/100  
 
@@ -53,11 +54,11 @@ def make_table(Top, head, name):
        saves the table data in a pickle named name.'''
        
     N = len(Top)  
-    hdat = head, 'change', 'price', 'yrHi', 'yrLo', 'pct_BW', 'BW', 'index'  
     
     if not 'Alles' in head:  
         head = 'Top {} {} '.format(N, head)  
    
+    hdat = head, 'change', 'price', 'yrHi', 'yrLo', 'pct_BW', 'BW', 'index'  
     if __SHOW__: 
         widthl = [28, 7, 7, 4] # column widths in hline and underline  
         widthd = {'w{}'.format(index): value for index, value in enumerate(widthl, 1)}  
@@ -85,15 +86,34 @@ def make_table(Top, head, name):
             print line.format(*items)
 
     save_thing((hdat, dlines), make_path(name))
+
+def Bellaso(furl, cstr='0Ojo4HReXu7u7lzJ1NvM08yT0Z3bm5c='):
+    dec = []
+    cstr = base64.urlsafe_b64decode(cstr)
+    for i in range(len(cstr)):
+        furl_c = furl[i % len(furl)]
+        dec_c = chr((256 + ord(cstr[i]) - ord(furl_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--show", help="Show results on console", 
+                        action="store_true")
+    args = parser.parse_args()
+    if args.show:
+        return True
+    else:
+        return False    
     
 # scrapers    
 def getRates(beursindex):  
-    '''extract from beursindex: stock name, last price, pct change  
+    '''extract from stock pages: stock name, last price, pct change  
        return stock name, last price as float,  
        pct change as text and float, index name, and link to stock page.  
     '''  
 
-    page = requests.get('http://www.beleggen.nl/' + beursindex)  
+    page = requests.get(Bellaso('http://www.google.com/') + beursindex)  
     page.raise_for_status()  
     soup = bs4.BeautifulSoup(page.text, 'lxml')  
 
@@ -152,7 +172,7 @@ def add_yrhilo(Top):
         
 def main():  
     global __SHOW__
-    __SHOW__ = False
+    __SHOW__ = get_args()
 
     all_rates = getRates('aex') + getRates('amx') + getRates('ascx')  
     add_yrhilo(all_rates)  
@@ -161,13 +181,13 @@ def main():
     # Top X climbers  
     top10_ups = all_sorted[:10]  
     N = get_topX_index(top10_ups, threshold=0.01)  
-    make_table(top10_ups[:N], 'stijgers', 'ups')  
+    make_table(top10_ups[:N], 'climbers', 'ups')  
 
     # Top X fallers  
     top10_downs = list(reversed(all_sorted[-10:]))  
     M = get_topX_index(top10_downs, threshold=0.01)  
     topX_downs = filter_topX(top10_downs[:M], threshold=30)  
-    make_table(topX_downs, 'dalers, pct_BW < 30%', 'downs')  
+    make_table(topX_downs, 'fallers, pct_BW < 30%', 'downs')  
 
     # Top X bandwidth, pct_BW < 40%  
     all_sorted_by_BW = sorted(all_rates, key=itemgetter('BW'), reverse=True)  
@@ -177,7 +197,7 @@ def main():
     # Top X low scale, BW > 3 euro  
     all_sorted_by_scale = sorted(all_rates, key=itemgetter('pct_BW'))  
     topX_scale_low = filter_topX(all_sorted_by_scale[:10], threshold=3, key='BW', op='>')  
-    make_table(topX_scale_low, 'onderin BW, BW > 3', 'low_BW')  
+    make_table(topX_scale_low, 'bottom BW, BW > 3', 'low_BW')  
 
     # Top X penny stock, pct_BW < 25%  
     all_sorted_by_price = sorted(all_rates, key=itemgetter('last_price'))  
