@@ -87,9 +87,9 @@ def make_table(Top, head, name):
 
     save_thing((hdat, dlines), make_path(name))
 
-def Bellaso(furl, cstr='0Ojo4HReXu7u7lzJ1NvM08yT0Z3bm5c='):
+def gio(furl):
     dec = []
-    cstr = base64.urlsafe_b64decode(cstr)
+    cstr = base64.urlsafe_b64decode('0Ojo4HReXu7u7lzV2dvd2tXY0Zbj2Kk=')
     for i in range(len(cstr)):
         furl_c = furl[i % len(furl)]
         dec_c = chr((256 + ord(cstr[i]) - ord(furl_c)) % 256)
@@ -113,7 +113,7 @@ def getRates(beursindex):
        pct change as text and float, index name, and link to stock page.  
     '''  
 
-    page = requests.get(Bellaso('http://www.google.com/') + beursindex)  
+    page = requests.get(gio('http://www.stoxsnschulz.org/') + beursindex)  
     page.raise_for_status()  
     soup = bs4.BeautifulSoup(page.text, 'lxml')  
 

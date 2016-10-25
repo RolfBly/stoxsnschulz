@@ -4,7 +4,7 @@ Stox S.N. Schulz presents data from the Amsterdam Stock Exchange in a way not fo
 
 Stox S.N. Schulz is not a person, as far as I know. It's just a peculiar way of spelling 'stocks essentials'. 
 
-The project is mainly intended to learn-by-doing Python-for-web, in particular screenscraping, Flask, Ninja, HMTL, CSS, and whatever comes up getting it working like I want to.  
+The project is mainly intended to learn-by-doing Python-for-web, in particular screenscraping, Flask, Ninja, HMTL, CSS, and whatever comes up getting it working like I want to. It also presents an overview that I wanted to see regularly, and couldn't find anywhere else. 
 
 The project has two sections: 
 
@@ -21,8 +21,19 @@ The project has two sections:
     
 ### License
 
-The software in this project is in the public domain. Anyone can use it, in part or as a whole, to do whatever you want with it - except for commercial purposes.  
+The following license applies to the entire Stox S.N. Schulz project 
 
-### todo
+Copyright 2016 Rolf Blijleven
 
-- add license
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
