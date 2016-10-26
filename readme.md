@@ -1,6 +1,6 @@
 ## stoxsnschulz Readme
 
-Stox S.N. Schulz presents data from the Amsterdam Stock Exchange in a way not found elsewhere. For more information, see \templates\about_content.html. 
+Stox S.N. Schulz presents data from the Amsterdam Stock Exchange in a way not found elsewhere. For more information, see stoxapp\templates\about_content.html. 
 
 Stox S.N. Schulz is not a person, as far as I know. It's just a peculiar way of spelling 'stocks essentials'. 
 
@@ -18,6 +18,8 @@ The project has two sections:
 
     - a page with the shortlists
     - an about page. 
+   
+   All other *.py (apart from `ud.py` and `hilo.py`) and *.html files make up the Flask app. 
     
 ### License
 
