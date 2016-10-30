@@ -8,19 +8,13 @@ The project is mainly intended to learn-by-doing Python-for-web, in particular s
 
 The project has two sections: 
 
-1. a screenscraper/data reshuffler, to run once each working day after about 17:20 CET. 
-
-    - `ud.py` (for **U**ps and **D**owns) reads all 75 AEX, AMC, AScX stocks, and a few interesting numbers about them, from various public web pages. `ud.py` calls `hilo.py`
-    - `hilo.py` reads 52 week **HI**gh and **LO**w from each individual stock page, also from various public web pages. A few extra parameters are calculated for each stock. 
-    - When all data is collected, five shortlists are computed, and then stored as pickles. They can also be output to the console, nicely formatted (or to a file if redirected). 
-    
-2. a minimal Flask app that reads the pickles and presents them on a web site. The site has just two pages: 
+1. a screenscraper/data reshuffler (not in this repo, but in UpsNDowns), to run once each working day after about 17:16 CET. 
+   
+2. a minimal Flask app (this repo) that presents the results on a web site. The site has just two pages: 
 
     - a page with the shortlists
     - an about page. 
    
-   All other *.py (apart from `ud.py` and `hilo.py`) and *.html files make up the Flask app. 
-    
 ### License
 
 The following license applies to the entire Stox S.N. Schulz project 
