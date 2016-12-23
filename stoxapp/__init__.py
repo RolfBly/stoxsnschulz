@@ -1,4 +1,13 @@
-﻿from flask import Flask
+﻿# -*- coding: utf-8 -*-
+
+from flask import Flask, render_template
 
 app = Flask(__name__)
-from stoxapp import views
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')

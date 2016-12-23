@@ -14,7 +14,11 @@ The project has two sections:
 
     - a page with the shortlists
     - an about page. 
-   
+
+### under construction
+
+run.py and views.py have become redundant.    
+
 ### License
 
 The following license applies to the entire Stox S.N. Schulz project 
