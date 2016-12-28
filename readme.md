@@ -17,7 +17,9 @@ The project has two sections:
 
 ### under construction
 
-run.py and views.py have become redundant.    
+views.py and run.py have become redundant. 
+
+
 
 ### License
 
