@@ -17,7 +17,7 @@ The project has two sections:
 
 ### under construction
 
-views.py and run.py have become redundant. 
+Yup. 
 
 
 
