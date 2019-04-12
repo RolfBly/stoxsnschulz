@@ -20,3 +20,5 @@ stoxapp\templates\main_table.html
 # compiled Python
 *.pyc
 
+stoxapp/templates/blabla.rtf
+stoxapp/templates/main_table.html
