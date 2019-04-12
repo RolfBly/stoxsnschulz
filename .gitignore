@@ -10,9 +10,7 @@ ud.txt
 /*.bat
 /ve
 about_content.md
-stoxapp\static\Thumbs.db
 Thumbs.db
-/stoxapp/templates/main_table.html
 main_table.html
 
 
