@@ -20,3 +20,4 @@ Thumbs.db
 # compiled Python
 *.pyc
 
+stoxapp/templates/main_table.html
