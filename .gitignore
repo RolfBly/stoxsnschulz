@@ -21,3 +21,4 @@ Thumbs.db
 *.pyc
 
 stoxapp/templates/main_table.html
+stoxapp/templates/main_table.html
