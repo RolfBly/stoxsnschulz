@@ -12,7 +12,7 @@ ud.txt
 about_content.md
 stoxapp\static\Thumbs.db
 Thumbs.db
-stoxapp\templates\main_table.html
+/stoxapp/templates/main_table.html
 main_table.html
 
 
